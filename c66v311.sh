@@ -15,9 +15,9 @@ cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/ma
 cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hbase-regionserver-0.94.21.27795.GA-1.noarch.rpm'
 
 # Downloading Hive-0.13...
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hive-0.13.26285-1.noarch.rpm'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hivemetastore-0.13.26285-1.noarch.rpm'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hiveserver2-0.13.26285-1.noarch.rpm'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hive-0.13.201411180959-1.noarch.rpm'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hivemetastore-0.13.201411180959-1.noarch.rpm'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hiveserver2-0.13.201411180959-1.noarch.rpm'
 
 
 # Creating package
@@ -33,5 +33,5 @@ gpgcheck=0
 EOF
 
 # Installing Mapr packages..."
-yum install mapr-cldb mapr-fileserver mapr-zookeeper mapr-tasktracker mapr-jobtracker mapr-hbase-master mapr-hbase-regionserver
+yum install -y mapr-cldb mapr-fileserver mapr-zookeeper mapr-tasktracker mapr-jobtracker mapr-hbase-master mapr-hbase-regionserver
 
