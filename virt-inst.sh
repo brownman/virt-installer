@@ -1,7 +1,7 @@
 #!/bin/sh
 source env.sh
 
-function build_hostname() {
+function build_token() {
 local OS_TYPE=$1
 local MAPR_VERSION=$2
 
@@ -98,14 +98,19 @@ if [[ -n $ANSWER ]]
 then OS_IMAGE_SIZE=$ANSWER
 fi
 
-
-OS_IMAGE_HOST_NAME=$(build_hostname $OS_TYPE $MAPR_VERSION).com
+OS_IMAGE_HOST_NAME=$(build_token $OS_TYPE $MAPR_VERSION).com
 
 read -p "[INPUT] Image hostname ["$OS_IMAGE_HOST_NAME"]: " ANSWER
 if [[ -n $ANSWER ]]
 then OS_IMAGE_HOST_NAME=$ANSWER
 fi
 
+OS_IMAGE_FILE_NAME=$(build_token $OS_TYPE $MAPR_VERSION).$OS_IMAGE_FORMAT
+
+read -p "[INPUT] Image filename ["$OS_IMAGE_FILE_NAME"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_FILE_NAME=$ANSWER
+fi
 
 read -p "[INPUT] Lets rock'n'roll (1 - yes, 0 - no)? ["$LETS_ROCK_N_ROLL"]: " ANSWER
 if [[ -n $ANSWER ]]
@@ -116,14 +121,18 @@ if [[ $ANSWER != 1 ]]
 then exit 0
 fi
 
+OS_IMAGE_SCRIPT_NAME=$(build_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 
-if [[ $OS_TYPE == 'Centos66' && $MAPR_VERSION == '3.1.1' ]]
-then sudo virt-builder centos-6 --output $OS_IMAGE_DIR/c66v311-new.qcow2 --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run c66v311.sh
-fi
+case $OS_TYPE in
+    'Centos66' )
+    sudo virt-builder centos-6 --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+     ;;
+    'Ubuntu14.04' )
+     sudo virt-builder ubuntu-14.04 --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME 
+     ;;
+esac
 
-if [[ $OS_TYPE == 'Ubuntu14.04' && $MAPR_VERSION == '4.0.1' ]]
-then sudo virt-builder ubuntu-14.04 --output $OS_IMAGE_DIR/u1404v401.qcow2 --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run u1404v401.sh 
-fi
 
 
 
