@@ -1,6 +1,5 @@
 #!/bin/sh
 
-set -x
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
@@ -23,7 +22,7 @@ cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/ma
 # Creating package
 createrepo /root/mapr-repo
 
-# Configuring repository...'
+# Configuring repository...
 cat >> /etc/yum.conf << EOF
 [maprtech]
 name=MapR Technologies, Inc.
@@ -32,6 +31,6 @@ enabled=1
 gpgcheck=0
 EOF
 
-# Installing Mapr packages..."
+# Installing Mapr packages...
 yum install -y mapr-cldb mapr-fileserver mapr-zookeeper mapr-tasktracker mapr-jobtracker mapr-hbase-master mapr-hbase-regionserver
 
