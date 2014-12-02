@@ -5,7 +5,7 @@
 mkdir /root/mapr-repo
 
 # Dwonloading MapR v3.1.1 packages...
-cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://package.mapr.com/releases/v3.1.1/redhat/'
+cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://package.mapr.com/releases/v4.0.1/redhat/'
 
 # Downloading HBase-0.98...
 cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hbase-0.98.4.27323.GA-1.noarch.rpm'
