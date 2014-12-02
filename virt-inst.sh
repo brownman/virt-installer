@@ -1,53 +1,80 @@
 #!/bin/sh
 source env.sh
-echo '[INFO] =============================================================='
 echo '[INFO] Select OS'
 echo '[INFO] 1 Centos 6.6'
 echo '[INFO] 2 Ubuntu 14.04'
-read -p "[INPUT] OS type:" ANSWER
-if [[ -z $ANSWER ]]
-then  echo '[ERROR] No OS type is set. Possible input 1 or 2.' 
-      exit 1
+read -p "[INPUT] OS type ["$OS_TYPE"]:" ANSWER
+if [[ -n $ANSWER ]]
+then  
+    if [[ $ANSWER != 1 && $ANSWER != 2 ]]
+    then  echo '[ERROR] Wrong OS type :'$ANSWER'. Possible input 1 or 2.' 
+          exit 1
+    fi
+
+    if [[ $ANSWER == 1 ]]
+    then OS_TYPE='Centos66'
+    fi
+
+    if [[ $ANSWER == 2 ]]
+    then OS_TYPE='Ubuntu14.04'
+    fi
 fi
 
-if [[ $ANSWER != 1 && $ANSWER != 2 ]]
-then  echo '[ERROR] Wrong OS type :'$ANSWER'. Possible input 1 or 2.' 
-      exit 1
-fi
 
-if [[ $ANSWER == 1 ]]
-then OS_TYPE='Centos66'
-fi
-
-if [[ $ANSWER == 2 ]]
-then OS_TYPE='Ubuntu14.04'
-fi
-
-echo '[INFO] =============================================================='
 echo '[INFO] Select Mapr version'
 echo '[INFO] 1 MapR-3.1.1'
 echo '[INFO] 2 MapR-4.0.1'
-read -p "[INPUT] MapR version:" ANSWER
-if [[ -z $ANSWER ]]
-then  echo '[ERROR] No Mapr version is set. Possible input 1 or 2.' 
+read -p "[INPUT] MapR version ["$MAPR_VERSION"]:" ANSWER
+if [[ -n $ANSWER ]]
+then  
+    if [[ $ANSWER != 1 && $ANSWER != 2 ]]
+    then  echo '[ERROR] Wrong MapR version :'$ANSWER'. Possible input 1 or 2.' 
+          exit 1
+    fi
+
+    if [[ $ANSWER == 1 ]]
+    then MAPR_VERSION='3.1.1'
+    fi
+
+    if [[ $ANSWER == 2 ]]
+    then MAPR_VERSION='4.0.1'
+    fi
+fi
+
+read -p "[INPUT] Image dir ["$OS_IMAGE_DIR"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_DIR=$ANSWER
+fi
+
+read -p "[INPUT] Image format ["$OS_IMAGE_FORMAT"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_FORMAT=$ANSWER
+fi
+
+if [[ $OS_IMAGE_FORMAT != raw && $OS_IMAGE_FORMAT != qcow2 ]]
+then  echo '[ERROR] Wrong image format :'$ANSWER'. Possible input raw or qcow2.' 
       exit 1
 fi
 
-if [[ $ANSWER != 1 && $ANSWER != 2 ]]
-then  echo '[ERROR] Wrong MapR version :'$ANSWER'. Possible input 1 or 2.' 
-      exit 1
-fi
-
-if [[ $ANSWER == 1 ]]
-then MAPR_VERSION='3.1.1'
-fi
-
-if [[ $ANSWER == 2 ]]
-then MAPR_VERSION='4.0.1'
+read -p "[INPUT] Image root password ["$OS_IMAGE_ROOT_PASSWD"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_ROOT_PASSWD=$ANSWER
 fi
 
 
-# rpcbind,mysql-server
+read -p "[INPUT] Image size ["$OS_IMAGE_SIZE"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_SIZE=$ANSWER
+fi
+
+read -p "[INPUT] Lets rock'n'roll (1 - yes, 0 - no)? ["$LETS_ROCK_N_ROLL"]: " ANSWER
+if [[ -n $ANSWER ]]
+then LETS_ROCK_N_ROLL=$ANSWER
+fi
+
+if [[ $ANSWER != 1 ]]
+then exit 0
+fi
 
 if [[ $OS_TYPE == 'Centos66' && $MAPR_VERSION == '3.1.1' ]]
 then sudo virt-builder centos-6 --output $OS_IMAGE_DIR/c66v311-new.qcow2 --verbose --format $OS_IMAGE_FORMAT --hostname c66v311.com --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run c66v311.sh
