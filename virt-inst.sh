@@ -29,6 +29,14 @@ case $OS_TYPE in
 esac
 }
 
+function set_hbase_version_in_script(){
+local HBASE_VERSION=$1
+local PATH_TO_SCRIPT=$2
+# delete line with hbase version
+sed -i '/HBASE_VERSION=/d' $PATH_TO_SCRIPT
+# insert new hbase version
+sed -i "s/#Do not delete this comment. Hbase version auto inserted after it./#Do not delete this comment. Hbase version auto inserted after it.\nHBASE_VERSION='$HBASE_VERSION'/" $PATH_TO_SCRIPT
+}
 
 
 echo '[INFO] Select OS'
@@ -112,6 +120,28 @@ if [[ -n $ANSWER ]]
 then OS_IMAGE_FILE_NAME=$ANSWER
 fi
 
+
+echo '[INFO] Select Hbase version'
+echo '[INFO] 1 0.94.21'
+echo '[INFO] 2 0.98.4'
+read -p "[INPUT] Hbase version ["$HBASE_VERSION"]:" ANSWER
+if [[ -n $ANSWER ]]
+then
+    if [[ $ANSWER != 1 && $ANSWER != 2 ]]
+    then  echo '[ERROR] Wrong Hbase version :'$ANSWER'. Possible input 1 or 2.'
+          exit 1
+    fi
+
+    if [[ $ANSWER == 1 ]]
+    then HBASE_VERSION='0.94.21'
+    fi
+
+    if [[ $ANSWER == 2 ]]
+    then HBASE_VERSION='0.98.4'
+    fi
+fi
+
+
 read -p "[INPUT] Lets rock'n'roll (1 - yes, 0 - no)? ["$LETS_ROCK_N_ROLL"]: " ANSWER
 if [[ -n $ANSWER ]]
 then LETS_ROCK_N_ROLL=$ANSWER
@@ -121,8 +151,11 @@ if [[ $ANSWER != 1 ]]
 then exit 0
 fi
 
-OS_IMAGE_SCRIPT_NAME=$(build_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_SCRIPT_NAME=./bin/$(build_token $OS_TYPE $MAPR_VERSION).sh
 OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
+
+set_hbase_version_in_script $HBASE_VERSION $OS_IMAGE_SCRIPT_NAME
+
 
 case $OS_TYPE in
     'Centos66' )
