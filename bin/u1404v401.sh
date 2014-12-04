@@ -1,8 +1,8 @@
 #!/bin/sh
 
 set -x
-#Do not delete this comment. Hbase version auto inserted after it.
-HBASE_VERSION='0.94.21'
+
+HBASE_VERSION='0.98.4'
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
@@ -55,32 +55,27 @@ sudo apt-get --yes --force-yes  install mapr-cldb mapr-fileserver mapr-nodemanag
 
 # Create flat storage for MapR-FS instead of using entire disk
 mkdir -m 777 -p /mapr-disks
-#dd if=/dev/zero of=/mapr-disks/disk0 bs=1G count=10
-#chmod 777 /mapr-disks/disk0
+dd if=/dev/zero of=/mapr-disks/disk0 bs=1M count=10000
+chmod 777 /mapr-disks/disk0
 
 # Adding startup command for automatic mounting of created storage
-#echo 'losetup /dev/loop0 /mapr-disks/disk0' > /etc/init.d/mapr-disk-mnt
-#chmod 755 /etc/init.d/mapr-disk-mnt
-#ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
-#losetup /dev/loop0 /mapr-disks/disk0
+echo 'losetup /dev/loop0 /mapr-disks/disk0' > /etc/init.d/mapr-disk-mnt
+chmod 755 /etc/init.d/mapr-disk-mnt
+ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
 
 
 # Adding hostname to /etc/hosts...
-#IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-#HOST_NAME=u1404v401.com
-#HOST_ALIAS=u1404v401
-#cat >> /etc/hosts << EOF
+IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
+HOST_NAME=u1404v401.com
+HOST_ALIAS=u1404v401
+cat >> /etc/hosts << EOF
 
 # Host name
-#$IP_ETH0  $HOST_NAME  $HOST_ALIAS
-#EOF
+$IP_ETH0  $HOST_NAME  $HOST_ALIAS
+EOF
 
 # Creating /opt/mapr/hostname file...
 #hostname --fqdn > /opt/mapr/hostname
 
 # Configuring warden.conf. Setting mfs.heapsize.percent=10'
-#sed -i 's/service.command.mfs.heapsize.percent=35/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
-
-
-
-
+sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
