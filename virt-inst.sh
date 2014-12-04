@@ -32,10 +32,20 @@ esac
 function set_hbase_version_in_script(){
 local HBASE_VERSION=$1
 local PATH_TO_SCRIPT=$2
-# delete line with hbase version
-sed -i '/HBASE_VERSION=/d' $PATH_TO_SCRIPT
-# insert new hbase version
-sed -i "s/#Do not delete this comment. Hbase version auto inserted after it./#Do not delete this comment. Hbase version auto inserted after it.\nHBASE_VERSION='$HBASE_VERSION'/" $PATH_TO_SCRIPT
+sed -i "s/.*HBASE_VERSION=.*/HBASE_VERSION='$HBASE_VERSION'/g" $PATH_TO_SCRIPT
+}
+
+
+function set_hostname_in_script(){
+local OS_IMAGE_HOST_NAME=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*HOST_NAME=.*/HOST_NAME=$OS_IMAGE_HOST_NAME/g" $PATH_TO_SCRIPT
+}
+
+function set_hostalias_in_script(){
+local OS_IMAGE_HOST_ALIAS=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*HOST_ALIAS=.*/HOST_ALIAS=$OS_IMAGE_HOST_ALIAS/g" $PATH_TO_SCRIPT
 }
 
 
@@ -113,6 +123,13 @@ if [[ -n $ANSWER ]]
 then OS_IMAGE_HOST_NAME=$ANSWER
 fi
 
+OS_IMAGE_HOST_ALIAS=$(build_token $OS_TYPE $MAPR_VERSION)
+
+read -p "[INPUT] Image host alias ["$OS_IMAGE_HOST_ALIAS"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_HOST_ALIAS=$ANSWER
+fi
+
 OS_IMAGE_FILE_NAME=$(build_token $OS_TYPE $MAPR_VERSION).$OS_IMAGE_FORMAT
 
 read -p "[INPUT] Image filename ["$OS_IMAGE_FILE_NAME"]: " ANSWER
@@ -147,7 +164,7 @@ if [[ -n $ANSWER ]]
 then LETS_ROCK_N_ROLL=$ANSWER
 fi
 
-if [[ $ANSWER != 1 ]]
+if [[ $LETS_ROCK_N_ROLL != 1 ]]
 then exit 0
 fi
 
@@ -155,14 +172,16 @@ OS_IMAGE_SCRIPT_NAME=./bin/$(build_token $OS_TYPE $MAPR_VERSION).sh
 OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 
 set_hbase_version_in_script $HBASE_VERSION $OS_IMAGE_SCRIPT_NAME
+set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_SCRIPT_NAME
+set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_SCRIPT_NAME
 
 
 case $OS_TYPE in
     'Centos66' )
-    sudo virt-builder centos-6 --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+    sudo virt-builder centos-6 --no-delete-on-failure --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
      ;;
     'Ubuntu14.04' )
-     sudo virt-builder ubuntu-14.04 --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME 
+     sudo virt-builder ubuntu-14.04 --no-delete-on-failure --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
      ;;
 esac
 
