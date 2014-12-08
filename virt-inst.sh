@@ -48,6 +48,12 @@ local PATH_TO_SCRIPT=$2
 sed -i "s/.*HOST_ALIAS=.*/HOST_ALIAS=$OS_IMAGE_HOST_ALIAS/g" $PATH_TO_SCRIPT
 }
 
+function set_cluster_name_in_script(){
+local OS_IMAGE_CLUSTER_NAME=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*OS_IMAGE_CLUSTER_NAME=.*/OS_IMAGE_CLUSTER_NAME=$OS_IMAGE_CLUSTER_NAME/g" $PATH_TO_SCRIPT
+}
+
 
 echo '[INFO] Select OS'
 echo '[INFO] 1 Centos 6.6'
@@ -138,6 +144,12 @@ then OS_IMAGE_FILE_NAME=$ANSWER
 fi
 
 
+read -p "[INPUT] MapR cluster name ["$OS_IMAGE_CLUSTER_NAME"]: " ANSWER
+if [[ -n $ANSWER ]]
+then OS_IMAGE_CLUSTER_NAME=$ANSWER
+fi
+
+
 echo '[INFO] Select Hbase version'
 echo '[INFO] 1 0.94.21'
 echo '[INFO] 2 0.98.4'
@@ -174,14 +186,14 @@ OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 set_hbase_version_in_script $HBASE_VERSION $OS_IMAGE_SCRIPT_NAME
 set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_SCRIPT_NAME
 set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_SCRIPT_NAME
-
+set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_SCRIPT_NAME
 
 case $OS_TYPE in
     'Centos66' )
-    sudo virt-builder centos-6 --no-delete-on-failure --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+    sudo virt-builder centos-6  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
      ;;
     'Ubuntu14.04' )
-     sudo virt-builder ubuntu-14.04 --no-delete-on-failure --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+     sudo virt-builder ubuntu-14.04  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
      ;;
 esac
 

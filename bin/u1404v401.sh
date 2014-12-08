@@ -3,6 +3,7 @@
 set -x
 
 HBASE_VERSION='0.98.4'
+OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
@@ -63,6 +64,9 @@ echo 'losetup /dev/loop0 /mapr-disks/disk0' > /etc/init.d/mapr-disk-mnt
 chmod 755 /etc/init.d/mapr-disk-mnt
 ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
 
+# Formating storage to maprfs...
+echo /dev/loop0 > /mapr-disks/disks.list
+
 
 # Adding hostname to /etc/hosts...
 IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
@@ -79,3 +83,6 @@ EOF
 
 # Configuring warden.conf. Setting mfs.heapsize.percent=10'
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
+
+# Configuring cluster...
+/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
