@@ -1,5 +1,6 @@
 #!/bin/sh
 source env.sh
+source ./bin/get-ip.sh
 
 function build_token() {
 local OS_TYPE=$1
@@ -7,11 +8,11 @@ local MAPR_VERSION=$2
 
 case $OS_TYPE in
     'Centos66' )
-     case $MAPR_VERSION in 
+     case $MAPR_VERSION in
          '3.1.1' )
           echo 'c66v311'
           ;;
-         '4.0.1' )     
+         '4.0.1' )
           echo 'c66v401'
           ;;
          '4.0.2' )
@@ -24,7 +25,7 @@ case $OS_TYPE in
          '3.1.1' )
           echo 'u1404v311'
           ;;
-         '4.0.1' )     
+         '4.0.1' )
           echo 'u1404v401'
           ;;
          '4.0.2' )
@@ -66,9 +67,9 @@ echo '[INFO] 1 Centos 6.6'
 echo '[INFO] 2 Ubuntu 14.04'
 read -p "[INPUT] OS type ["$OS_TYPE"]:" ANSWER
 if [[ -n $ANSWER ]]
-then  
+then
     if [[ $ANSWER != 1 && $ANSWER != 2 ]]
-    then  echo '[ERROR] Wrong OS type :'$ANSWER'. Possible input 1 or 2.' 
+    then  echo '[ERROR] Wrong OS type :'$ANSWER'. Possible input 1 or 2.'
           exit 1
     fi
 
@@ -88,7 +89,7 @@ echo '[INFO] 2 MapR-4.0.1'
 echo '[INFO] 3 MapR-4.0.2'
 read -p "[INPUT] MapR version ["$MAPR_VERSION"]:" ANSWER
 if [[ -n $ANSWER ]]
-then  
+then
     if [[ $ANSWER != 1 && $ANSWER != 2 && $ANSWER != 3 ]]
     then  echo '[ERROR] Wrong MapR version :'$ANSWER'. Possible input 1, 2 or 3.'
           exit 1
@@ -118,7 +119,7 @@ then OS_IMAGE_FORMAT=$ANSWER
 fi
 
 if [[ $OS_IMAGE_FORMAT != raw && $OS_IMAGE_FORMAT != qcow2 ]]
-then  echo '[ERROR] Wrong image format :'$ANSWER'. Possible input raw or qcow2.' 
+then  echo '[ERROR] Wrong image format :'$ANSWER'. Possible input raw or qcow2.'
       exit 1
 fi
 
@@ -128,7 +129,7 @@ then OS_IMAGE_ROOT_PASSWD=$ANSWER
 fi
 
 
-read -p "[INPUT] Image size ["$OS_IMAGE_SIZE"]: " ANSWER
+read -p "[INPUT] Image size (GB) ["$OS_IMAGE_SIZE"]: " ANSWER
 if [[ -n $ANSWER ]]
 then OS_IMAGE_SIZE=$ANSWER
 fi
@@ -201,14 +202,16 @@ set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_SCRIPT_NAME
 
 case $OS_TYPE in
     'Centos66' )
-    sudo virt-builder centos-6  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+    sudo virt-builder centos-6  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size ${OS_IMAGE_SIZE}G --run $OS_IMAGE_SCRIPT_NAME
+    virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import
      ;;
     'Ubuntu14.04' )
-     sudo virt-builder ubuntu-14.04  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size $OS_IMAGE_SIZE --run $OS_IMAGE_SCRIPT_NAME
+     sudo virt-builder ubuntu-14.04  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size ${OS_IMAGE_SIZE}G --run $OS_IMAGE_SCRIPT_NAME
+     virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import
      ;;
 esac
 
-
-
-
+# Set new IP in /etc/hosts
+OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
+echo $OS_IMAGE_IP
 
