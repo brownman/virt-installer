@@ -2,11 +2,12 @@
 
 #Do not delete this comment. Hbase version auto inserted after it.
 HBASE_VERSION='0.94.21'
+OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
 
-# Dwonloading MapR v3.1.1 packages...
+# Dwonloading MapR v4.0.1 packages...
 cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://package.mapr.com/releases/v4.0.1/redhat/'
 
 
@@ -51,3 +52,35 @@ EOF
 # Installing Mapr packages...
 yum install -y mapr-cldb mapr-fileserver mapr-nodemanager mapr-zookeeper mapr-resourcemanager mapr-tasktracker mapr-jobtracker mapr-historyserver mapr-hbase-master mapr-hbase-regionserver mapr-hive mapr-hivemetastore mapr-hiveserver2
 
+# Create flat storage for MapR-FS instead of using entire disk
+mkdir -m 777 -p /mapr-disks
+dd if=/dev/zero of=/mapr-disks/disk0 bs=1M count=10000
+chmod 777 /mapr-disks/disk0
+
+# Adding startup command for automatic mounting of created storage
+echo 'losetup /dev/loop0 /mapr-disks/disk0' > /etc/init.d/mapr-disk-mnt
+chmod 755 /etc/init.d/mapr-disk-mnt
+ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
+
+# Formating storage to maprfs...
+echo /dev/loop0 > /mapr-disks/disks.list
+
+
+# Adding hostname to /etc/hosts...
+IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
+HOST_NAME=c66v401hb94.com
+HOST_ALIAS=c66v401hb94
+cat >> /etc/hosts << EOF
+
+# Host name
+$IP_ETH0  $HOST_NAME  $HOST_ALIAS
+EOF
+
+# Creating /opt/mapr/hostname file...
+hostname --fqdn > /opt/mapr/hostname
+
+# Configuring warden.conf. Setting mfs.heapsize.percent=10'
+sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
+
+# Configuring cluster...
+/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
