@@ -14,7 +14,10 @@ case $OS_TYPE in
          '4.0.1' )     
           echo 'c66v401'
           ;;
-     esac 
+         '4.0.2' )
+          echo 'c66v402'
+          ;;
+     esac
      ;;
     'Ubuntu14.04' )
      case $MAPR_VERSION in
@@ -24,7 +27,10 @@ case $OS_TYPE in
          '4.0.1' )     
           echo 'u1404v401'
           ;;
-     esac 
+         '4.0.2' )
+          echo 'u1404v402'
+          ;;
+     esac
      ;;
 esac
 }
@@ -79,11 +85,12 @@ fi
 echo '[INFO] Select Mapr version'
 echo '[INFO] 1 MapR-3.1.1'
 echo '[INFO] 2 MapR-4.0.1'
+echo '[INFO] 3 MapR-4.0.2'
 read -p "[INPUT] MapR version ["$MAPR_VERSION"]:" ANSWER
 if [[ -n $ANSWER ]]
 then  
-    if [[ $ANSWER != 1 && $ANSWER != 2 ]]
-    then  echo '[ERROR] Wrong MapR version :'$ANSWER'. Possible input 1 or 2.' 
+    if [[ $ANSWER != 1 && $ANSWER != 2 && $ANSWER != 3 ]]
+    then  echo '[ERROR] Wrong MapR version :'$ANSWER'. Possible input 1, 2 or 3.'
           exit 1
     fi
 
@@ -93,6 +100,10 @@ then
 
     if [[ $ANSWER == 2 ]]
     then MAPR_VERSION='4.0.1'
+    fi
+
+    if [[ $ANSWER == 3 ]]
+    then MAPR_VERSION='4.0.2'
     fi
 fi
 
