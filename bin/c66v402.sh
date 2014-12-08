@@ -2,6 +2,7 @@
 
 #Do not delete this comment. Hbase version auto inserted after it.
 HBASE_VERSION='0.94.21'
+OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
