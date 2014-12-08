@@ -1,13 +1,12 @@
 #!/bin/sh
 
-#Do not delete this comment. Hbase version auto inserted after it.
-HBASE_VERSION='0.94.21'
+HBASE_VERSION='0.98.4'
 OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
 
-# Dwonloading MapR v3.1.1 packages...
+# Dwonloading MapR v4.0.2 packages...
 cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://osayankin:Al3ks3y7!@stage.mapr.com/beta/cybervision/v4.0.2/redhat/'
 
 
@@ -68,8 +67,8 @@ echo /dev/loop0 > /mapr-disks/disks.list
 
 # Adding hostname to /etc/hosts...
 IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=c66v401hb94.com
-HOST_ALIAS=c66v401hb94
+HOST_NAME=
+HOST_ALIAS=
 cat >> /etc/hosts << EOF
 
 # Host name
@@ -83,4 +82,4 @@ hostname --fqdn > /opt/mapr/hostname
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 
 # Configuring cluster...
-/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
+#/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user

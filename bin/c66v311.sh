@@ -1,6 +1,5 @@
 #!/bin/sh
 
-#Do not delete this comment. Hbase version auto inserted after it.
 HBASE_VERSION='0.94.21'
 OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
@@ -81,4 +80,4 @@ hostname --fqdn > /opt/mapr/hostname
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 
 # Configuring cluster...
-/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
+#/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
