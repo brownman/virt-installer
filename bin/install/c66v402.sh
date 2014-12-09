@@ -7,7 +7,7 @@ OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 mkdir /root/mapr-repo
 
 # Dwonloading MapR v4.0.2 packages...
-cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://osayankin:Al3ks3y7!@stage.mapr.com/beta/cybervision/v4.0.2/redhat/'
+cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://osayankin:OsayCanUC!@stage.mapr.com/beta/cybervision/v4.0.2/redhat/'
 
 
 case $HBASE_VERSION in
