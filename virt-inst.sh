@@ -1,5 +1,5 @@
 #!/bin/sh
-source env.sh
+source ./conf/env.sh
 source ./bin/get-ip.sh
 
 function build_token() {
