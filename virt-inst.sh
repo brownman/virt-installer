@@ -192,7 +192,7 @@ if [[ $LETS_ROCK_N_ROLL != 1 ]]
 then exit 0
 fi
 
-OS_IMAGE_SCRIPT_NAME=./bin/$(build_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_SCRIPT_NAME=./bin/install/$(build_token $OS_TYPE $MAPR_VERSION).sh
 OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 
 set_hbase_version_in_script $HBASE_VERSION $OS_IMAGE_SCRIPT_NAME
@@ -203,11 +203,11 @@ set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_SCRIPT_NAME
 case $OS_TYPE in
     'Centos66' )
     sudo virt-builder centos-6  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,syslinux,lsb,sdparm,nc,java-1.7.0-openjdk-devel.x86_64,mysql-connector-java,createrepo --root-password password:$OS_IMAGE_ROOT_PASSWD --size ${OS_IMAGE_SIZE}G --run $OS_IMAGE_SCRIPT_NAME
-    virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import
+    virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import --noautoconsole
      ;;
     'Ubuntu14.04' )
      sudo virt-builder ubuntu-14.04  --output $OS_IMAGE_FULL_PATH --verbose --format $OS_IMAGE_FORMAT --hostname $OS_IMAGE_HOST_NAME --install openssh-server,openjdk-7-jdk,syslinux,lsb,sdparm,dpkg-dev --root-password password:$OS_IMAGE_ROOT_PASSWD --size ${OS_IMAGE_SIZE}G --run $OS_IMAGE_SCRIPT_NAME
-     virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import
+     virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import --noautoconsole
      ;;
 esac
 

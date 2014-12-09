@@ -8,8 +8,8 @@ OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
 
-# Dwonloading MapR v4.0.1 packages...
-cd /root/mapr-repo && wget -r -l2 -A.deb 'http://osayankin:Al3ks3y7!@stage.mapr.com/beta/cybervision/v4.0.2/ubuntu/pool/optional/m/'
+# Dwonloading MapR v4.0.2 packages...
+cd /root/mapr-repo && wget -r -l2 -A.deb 'http://osayankin:OsayCanUC!@stage.mapr.com/beta/cybervision/v4.0.2/ubuntu/pool/optional/m/'
 
 # Creating package info dir...
 mkdir -p /root/mapr-repo/dists/binary/optional/binary-amd64
@@ -70,8 +70,8 @@ echo /dev/loop0 > /mapr-disks/disks.list
 
 # Adding hostname to /etc/hosts...
 IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=u1404v401.com
-HOST_ALIAS=u1404v401
+HOST_NAME=u1404v402.com
+HOST_ALIAS=u1404v402
 cat >> /etc/hosts << EOF
 
 # Host name

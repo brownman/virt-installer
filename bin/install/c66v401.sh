@@ -67,8 +67,8 @@ echo /dev/loop0 > /mapr-disks/disks.list
 
 # Adding hostname to /etc/hosts...
 IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=
-HOST_ALIAS=
+HOST_NAME=c66v401hb98.com
+HOST_ALIAS=c66v401hb98
 cat >> /etc/hosts << EOF
 
 # Host name
