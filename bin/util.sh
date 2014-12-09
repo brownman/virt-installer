@@ -59,3 +59,15 @@ local PATH_TO_SCRIPT=$2
 sed -i "s/.*OS_IMAGE_CLUSTER_NAME=.*/OS_IMAGE_CLUSTER_NAME=$OS_IMAGE_CLUSTER_NAME/g" $PATH_TO_SCRIPT
 }
 
+
+function update_etc_hosts(){
+local OS_IMAGE_HOST_NAME=$1
+local OS_IMAGE_HOST_ALIAS=$2
+local OS_IMAGE_IP=$3
+
+if  sudo grep -q $OS_IMAGE_HOST_NAME /etc/hosts ; then
+    sudo sed -i "s/.*$OS_IMAGE_HOST_NAME.*/$OS_IMAGE_IP $OS_IMAGE_HOST_NAME $OS_IMAGE_HOST_ALIAS/g" /etc/hosts
+else
+    echo "$OS_IMAGE_IP  $OS_IMAGE_HOST_NAME  $OS_IMAGE_HOST_ALIAS" | sudo tee --append /etc/hosts
+fi
+}

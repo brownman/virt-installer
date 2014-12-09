@@ -53,5 +53,7 @@ esac
 
 # Set new IP in /etc/hosts
 OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
-echo $OS_IMAGE_IP
+echo 'IP address of '$OS_IMAGE_HOST_ALIAS' is :' $OS_IMAGE_IP
+
+update_etc_hosts $OS_IMAGE_HOST_NAME $OS_IMAGE_HOST_ALIAS $OS_IMAGE_IP
 
