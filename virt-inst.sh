@@ -53,7 +53,13 @@ esac
 
 # Set new IP in /etc/hosts
 OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
-echo 'IP address of '$OS_IMAGE_HOST_ALIAS' is :' $OS_IMAGE_IP
+while [[ -z $OS_IMAGE_IP ]]; do
+    echo '[INFO] Whaiting while vm is booting...'
+    sleep 1
+    OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
+done
+
+echo '[INFO] IP address of '$OS_IMAGE_HOST_ALIAS' is :' $OS_IMAGE_IP
 
 update_etc_hosts $OS_IMAGE_HOST_NAME $OS_IMAGE_HOST_ALIAS $OS_IMAGE_IP
 
