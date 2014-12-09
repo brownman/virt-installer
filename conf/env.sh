@@ -8,3 +8,4 @@ export MAPR_VERSION='4.0.1'
 export LETS_ROCK_N_ROLL=1
 export HBASE_VERSION='0.98.4'
 export OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
+export SSH_ID_RSA_PUB=/home/asayankin/.ssh/id_rsa.pub

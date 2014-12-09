@@ -67,17 +67,6 @@ ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
 # Formating storage to maprfs...
 echo /dev/loop0 > /mapr-disks/disks.list
 
-
-# Adding hostname to /etc/hosts...
-IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=u1404v401.com
-HOST_ALIAS=u1404v401
-cat >> /etc/hosts << EOF
-
-# Host name
-$IP_ETH0  $HOST_NAME  $HOST_ALIAS
-EOF
-
 # Creating /opt/mapr/hostname file...
 #hostname --fqdn > /opt/mapr/hostname
 
@@ -85,4 +74,7 @@ EOF
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 
 # Configuring cluster...
-/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
+#/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -a -v -RM localhost -HS localhost -f --create-user
+
+# Permit root login
+sed -i 's/.*PermitRootLogin.*/PermitRootLogin Yes/g' /etc/ssh/sshd_config

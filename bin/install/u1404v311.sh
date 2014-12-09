@@ -8,7 +8,7 @@ OS_IMAGE_CLUSTER_NAME=
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
 
-# Dwonloading MapR v4.0.1 packages...
+# Dwonloading MapR v3.1.1 packages...
 cd /root/mapr-repo && wget -r -l2 -A.deb 'http://package.mapr.com/releases/v3.1.1/ubuntu/pool/optional/m/'
 
 # Creating package info dir...
@@ -65,16 +65,6 @@ ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
 # Formating storage to maprfs...
 echo '/dev/loop0' > /mapr-disks/disks.list
 
-# Adding hostname to /etc/hosts...
-IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=u1404v311.com
-HOST_ALIAS=u1404v311
-cat >> /etc/hosts << EOF
-
-# Host name
-$IP_ETH0  $HOST_NAME  $HOST_ALIAS
-EOF
-
 # Creating /opt/mapr/hostname file...
 #hostname --fqdn > /opt/mapr/hostname
 
@@ -82,4 +72,7 @@ EOF
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 
 # Configuring cluster...
-/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -f --create-user
+#/opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -f --create-user
+
+# Permit root login
+sed -i 's/.*PermitRootLogin.*/PermitRootLogin Yes/g' /etc/ssh/sshd_config
