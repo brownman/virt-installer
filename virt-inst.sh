@@ -33,6 +33,9 @@ set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_
 set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
 set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
 
+echo '[INFO] Create dir '$OS_IMAGE_DIR
+mkdir -p $OS_IMAGE_DIR
+
 case $OS_TYPE in
 
     'Centos66' )
@@ -82,6 +85,6 @@ while [[ $RESULT -ne 0 ]]; do
     sleep 1
 done
 
-echo '[INFO] Copy and run post install script...'
+echo '[INFO] Copy and run post install script.'
 scp $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH root@$OS_IMAGE_HOST_ALIAS:/root/
 ssh root@$OS_IMAGE_HOST_ALIAS 'bash /root/'$OS_IMAGE_SCRIPT_NAME
