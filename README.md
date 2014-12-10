@@ -4,17 +4,16 @@ virt-installer
 INTRODUCTION
 ------------
 
-Virtual machines installer for [MapR] (https://www.mapr.com/) single node cluster. Following OS for MapR cluster
+Virtual machines installer for  single node cluster. Following OS for cluster
  are supported:
 
 - CentOS 6.6
 - Ubuntu 14.04
 
-Following versions of MapR are supported:
+Following versions of cluster are supported:
 
 - 3.1.1
 - 4.0.1
-- 4.0.2
 
 **NOTE!** This project is used *only for testing purposes* and not for production mode.
 
