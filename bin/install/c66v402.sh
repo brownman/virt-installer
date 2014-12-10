@@ -6,7 +6,7 @@ HBASE_VERSION='0.98.4'
 mkdir /root/mapr-repo
 
 # Dwonloading MapR v4.0.2 packages...
-cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://osayankin:OsayCanUC!@stage.mapr.com/beta/cybervision/v4.0.2/redhat/'
+cd /root/mapr-repo && wget -r -l1 -A.rpm 'http://<user>:<passwd>@stage.mapr.com/beta/cybervision/v4.0.2/redhat/'
 
 
 case $HBASE_VERSION in
