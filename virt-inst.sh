@@ -40,7 +40,7 @@ case $OS_TYPE in
 
     if [[ $? -eq 0 ]]
     then
-        virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import --noautoconsole
+        virt-install --name $OS_IMAGE_HOST_ALIAS --memory $OS_IMAGE_MEMORY --vcpus $OS_IMAGE_VIRT_CPU --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import --noautoconsole
     else
         echo '[ERROR] No vm file created.'
         exit 0
@@ -51,7 +51,7 @@ case $OS_TYPE in
 
     if [[ $? -eq 0 ]]
     then
-         virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import --noautoconsole
+         virt-install --name $OS_IMAGE_HOST_ALIAS --memory $OS_IMAGE_MEMORY --vcpus $OS_IMAGE_VIRT_CPU --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import --noautoconsole
     else
         echo '[ERROR] No vm file created.'
         exit 0
