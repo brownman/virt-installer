@@ -61,10 +61,6 @@ ln -s /etc/init.d/mapr-disk-mnt /etc/rc2.d/S69mapr-disk-mnt
 # Formating storage to maprfs...
 echo /dev/loop0 > /mapr-disks/disks.list
 
-
-# Creating /opt/mapr/hostname file...
-hostname --fqdn > /opt/mapr/hostname
-
 # Configuring warden.conf. Setting mfs.heapsize.percent=10'
 sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 

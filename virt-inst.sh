@@ -41,6 +41,9 @@ case $OS_TYPE in
     if [[ $? -eq 0 ]]
     then
         virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=rhel6 --import --noautoconsole
+    else
+        echo '[ERROR] No vm file created.'
+        exit 0
     fi
     ;;
     'Ubuntu14.04' )
@@ -49,6 +52,9 @@ case $OS_TYPE in
     if [[ $? -eq 0 ]]
     then
          virt-install --name $OS_IMAGE_HOST_ALIAS --memory 8192 --vcpus 3 --disk path=$OS_IMAGE_FULL_PATH,size=${OS_IMAGE_SIZE}   --virt-type kvm --os-type=linux  --os-variant=ubuntuprecise --import --noautoconsole
+    else
+        echo '[ERROR] No vm file created.'
+        exit 0
     fi
     ;;
 esac
@@ -56,7 +62,7 @@ esac
 echo '[INFO] Set new IP in /etc/hosts'
 OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
 while [[ -z $OS_IMAGE_IP ]]; do
-    echo '[INFO] Whaiting while vm is booting...'
+    echo '[INFO] Waiting while vm is booting...'
     sleep 1
     OS_IMAGE_IP=$(get_ip $OS_IMAGE_HOST_ALIAS)
 done
@@ -65,8 +71,17 @@ echo '[INFO] IP address of '$OS_IMAGE_HOST_ALIAS' is :' $OS_IMAGE_IP
 
 update_etc_hosts $OS_IMAGE_HOST_NAME $OS_IMAGE_HOST_ALIAS $OS_IMAGE_IP
 
-ssh-copy-id -i $SSH_ID_RSA_PUB root@$OS_IMAGE_HOST_ALIAS
+ssh-keygen -f "$USER_HOME/.ssh/known_hosts" -R $OS_IMAGE_HOST_ALIAS
 
-echo '[INFO] Copy and run post install script'
+RESULT=-1
+
+while [[ $RESULT -ne 0 ]]; do
+    ssh-copy-id -i $SSH_ID_RSA_PUB root@$OS_IMAGE_HOST_ALIAS
+    RESULT=$?
+    echo '[INFO] Waiting for ssh connection...'
+    sleep 1
+done
+
+echo '[INFO] Copy and run post install script...'
 scp $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH root@$OS_IMAGE_HOST_ALIAS:/root/
 ssh root@$OS_IMAGE_HOST_ALIAS 'bash /root/'$OS_IMAGE_SCRIPT_NAME
