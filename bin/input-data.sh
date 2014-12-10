@@ -1,5 +1,25 @@
 #!/bin/sh
 
+function print_input_summary(){
+echo '[INFO] ====================================================='
+echo '[INFO] Virtual machine parameters'
+echo '[INFO] ====================================================='
+echo '[INFO] OS                                    : '$OS_TYPE
+echo '[INFO] Mapr version                          : '$MAPR_VERSION
+echo '[INFO] Image dir                             : '$OS_IMAGE_DIR
+echo '[INFO] Image format                          : '$OS_IMAGE_FORMAT
+echo '[INFO] Image root password                   : '$OS_IMAGE_ROOT_PASSWD
+echo '[INFO] Image size (GB)                       : '$OS_IMAGE_SIZE
+echo '[INFO] Image RAM size (MB)                   : '$OS_IMAGE_MEMORY
+echo '[INFO] Image virtual CPU count               : '$OS_IMAGE_VIRT_CPU
+echo '[INFO] Image hostname                        : '$OS_IMAGE_HOST_NAME
+echo '[INFO] Image host alias                      : '$OS_IMAGE_HOST_ALIAS
+echo '[INFO] Image filename                        : '$OS_IMAGE_FILE_NAME
+echo '[INFO] MapR cluster name                     : '$OS_IMAGE_CLUSTER_NAME
+echo '[INFO] Hbase version                         : '$HBASE_VERSION
+}
+
+
 function get_input_from_console(){
 
 echo '[INFO] Select OS'
@@ -195,6 +215,8 @@ then
 else break
 fi
 done
+
+print_input_summary
 
 
 read -p "[INPUT] Lets rock'n'roll (1 - yes, 0 - no)? ["$LETS_ROCK_N_ROLL"]: " ANSWER
