@@ -270,6 +270,7 @@ input_host_name
 input_host_alias
 input_file_name
 input_cluster_name
+input_hbase_version
 print_input_summary
 input_lets_rock_n_roll
 }
