@@ -24,7 +24,7 @@ This module requires the following modules:
 
 - xml2
 - libxml2
-
+- libguestfs-tools
 
 INSTALLATION
 ------------
