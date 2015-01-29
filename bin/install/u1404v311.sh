@@ -34,9 +34,9 @@ case $HBASE_VERSION in
 esac
 
 # Downloading Hive-0.13...
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/ubuntu/dists/binary/mapr-hive_0.13.201411180948_all.deb'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/ubuntu/dists/binary/mapr-hivemetastore_0.13.201411180948_all.deb'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/ubuntu/dists/binary/mapr-hiveserver2_0.13.201411180948_all.deb'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hive_0.13.201501201824_all.deb'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hivemetastore_0.13.201501201824_all.deb'
+cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hiveserver2_0.13.201501201824_all.deb'
 
 # Creating package.gz...
 cd /root/mapr-repo && dpkg-scanpackages . /dev/null | gzip -9c > ./dists/binary/optional/binary-amd64/Packages.gz
