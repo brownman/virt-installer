@@ -9,7 +9,7 @@ OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 mkdir /root/mapr-repo
 
 # Dwonloading MapR v4.0.2 packages...
-cd /root/mapr-repo && wget -r -l2 -A.deb 'http://<user>:<passwd>@stage.mapr.com/beta/cybervision/v4.0.2/ubuntu/pool/optional/m/'
+cd /root/mapr-repo && wget -r -l2 -A.deb 'http://package.mapr.com/releases/v4.0.2/ubuntu/pool/optional/m/'
 
 # Creating package info dir...
 mkdir -p /root/mapr-repo/dists/binary/optional/binary-amd64

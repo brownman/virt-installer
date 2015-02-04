@@ -14,6 +14,7 @@ Following versions of cluster are supported:
 
 - 3.1.1
 - 4.0.1
+- 4.0.2
 
 **NOTE!** This project is used *only for testing purposes* and not for production mode.
 
