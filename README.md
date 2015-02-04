@@ -26,6 +26,7 @@ This module requires the following modules:
 - xml2
 - libxml2
 - libguestfs-tools
+- KVM (qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils). See https://help.ubuntu.com/community/KVM/Installation
 
 INSTALLATION
 ------------
