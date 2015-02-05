@@ -21,12 +21,10 @@ losetup /dev/loop0 /mapr-disks/disk0
 # Configuring cluster..
 if [ $RUN_CONFIGURE_SH_AFTER_INSTALL -eq 1 ]; then
    /opt/mapr/server/configure.sh -C localhost -Z localhost -N $OS_IMAGE_CLUSTER_NAME -f --create-user
-fi
 
-# Formating storage to maprfs
-/opt/mapr/server/disksetup -F /mapr-disks/disks.list
+    # Formating storage to maprfs
+    /opt/mapr/server/disksetup -F /mapr-disks/disks.list
 
-# Configuring warden.conf. Setting mfs.heapsize.percent=10'
-if [ $RUN_CONFIGURE_SH_AFTER_INSTALL -eq 1 ]; then
+    # Configuring warden.conf. Setting mfs.heapsize.percent=10'
     sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 fi
