@@ -12,3 +12,4 @@ export LETS_ROCK_N_ROLL=1
 export HBASE_VERSION='0.98.4'
 export OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 export SSH_ID_RSA_PUB=$USER_HOME/.ssh/id_rsa.pub
+export RUN_CONFIGURE_SH_AFTER_INSTALL=1

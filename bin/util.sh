@@ -60,6 +60,12 @@ sed -i "s/.*OS_IMAGE_CLUSTER_NAME=.*/OS_IMAGE_CLUSTER_NAME=$OS_IMAGE_CLUSTER_NAM
 }
 
 
+function set_run_configure_sh_after_install_in_script(){
+local RUN_CONFIGURE_SH_AFTER_INSTALL=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*RUN_CONFIGURE_SH_AFTER_INSTALL=.*/RUN_CONFIGURE_SH_AFTER_INSTALL=$RUN_CONFIGURE_SH_AFTER_INSTALL/g" $PATH_TO_SCRIPT
+}
+
 function update_etc_hosts(){
 local OS_IMAGE_HOST_NAME=$1
 local OS_IMAGE_HOST_ALIAS=$2

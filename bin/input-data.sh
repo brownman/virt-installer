@@ -17,6 +17,7 @@ echo '[INFO] Image host alias                      : '$OS_IMAGE_HOST_ALIAS
 echo '[INFO] Image filename                        : '$OS_IMAGE_FILE_NAME
 echo '[INFO] MapR cluster name                     : '$OS_IMAGE_CLUSTER_NAME
 echo '[INFO] Hbase version                         : '$HBASE_VERSION
+echo '[INFO] Run configure.sh after package install: '$RUN_CONFIGURE_SH_AFTER_INSTALL
 }
 
 
@@ -240,6 +241,14 @@ then LETS_ROCK_N_ROLL=$ANSWER
 fi
 }
 
+function input_run_configure_sh_after_install(){
+read -p "[INPUT] Run configure.sh after installation of packages (1 - yes, 0 - no)? ["$RUN_CONFIGURE_SH_AFTER_INSTALL"]: " ANSWER
+if [[ -n $ANSWER ]]
+then RUN_CONFIGURE_SH_AFTER_INSTALL=$ANSWER
+fi
+}
+
+
 function export_vars(){
 export OS_IMAGE_DIR=$OS_IMAGE_DIR
 export OS_IMAGE_FORMAT=$OS_IMAGE_FORMAT
@@ -255,6 +264,7 @@ export OS_IMAGE_HOST_ALIAS=$OS_IMAGE_HOST_ALIAS
 export OS_IMAGE_FILE_NAME=$OS_IMAGE_FILE_NAME
 export OS_IMAGE_MEMORY=$OS_IMAGE_MEMORY
 export OS_IMAGE_VIRT_CPU=$OS_IMAGE_VIRT_CPU
+export RUN_CONFIGURE_SH_AFTER_INSTALL=$RUN_CONFIGURE_SH_AFTER_INSTALL
 }
 
 function get_input_from_console(){
@@ -271,6 +281,7 @@ input_host_alias
 input_file_name
 input_cluster_name
 input_hbase_version
+input_run_configure_sh_after_install
 print_input_summary
 input_lets_rock_n_roll
 }
