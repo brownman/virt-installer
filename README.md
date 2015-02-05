@@ -28,6 +28,12 @@ This module requires the following modules:
 - libguestfs-tools
 - KVM (qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils). See https://help.ubuntu.com/community/KVM/Installation
 
+You also need to cache templates for OS images before running virt-inst.sh:
+
+```
+    virt-builder --cache-all-templates
+```
+
 INSTALLATION
 ------------
 
