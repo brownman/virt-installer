@@ -87,6 +87,31 @@ local PATH_TO_SCRIPT=$2
 sed -i "s/.*CLUSTER_SECURE=.*/CLUSTER_SECURE=$CLUSTER_SECURE/g" $PATH_TO_SCRIPT
 }
 
+
+function set_krb_default_realm_in_script(){
+local KRB_DEFAULT_REALM=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*KRB_DEFAULT_REALM=.*/KRB_DEFAULT_REALM=$KRB_DEFAULT_REALM/g" $PATH_TO_SCRIPT
+}
+
+function set_krb_database_passwd_in_script(){
+local KRB_DATABASE_PASSWD=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*KRB_DATABASE_PASSWD=.*/KRB_DATABASE_PASSWD=$KRB_DATABASE_PASSWD/g" $PATH_TO_SCRIPT
+}
+
+function set_krb_admin_user_passwd_in_script(){
+local KRB_ADMIN_USER_PASSWD=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*KRB_ADMIN_USER_PASSWD=.*/KRB_ADMIN_USER_PASSWD=$KRB_ADMIN_USER_PASSWD/g" $PATH_TO_SCRIPT
+}
+
+function set_krb_mapr_user_passwd_in_script(){
+local KRB_MAPR_USER_PASSWD=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*KRB_MAPR_USER_PASSWD=.*/KRB_MAPR_USER_PASSWD=$KRB_MAPR_USER_PASSWD/g" $PATH_TO_SCRIPT
+}
+
 function update_etc_hosts(){
 local OS_IMAGE_HOST_NAME=$1
 local OS_IMAGE_HOST_ALIAS=$2

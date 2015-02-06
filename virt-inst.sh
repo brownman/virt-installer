@@ -24,17 +24,30 @@ then exit 0
 fi
 
 OS_IMAGE_INSTALL_SCRIPT_FULL_PATH=./bin/install/$(build_os_mapr_token $OS_TYPE $MAPR_VERSION).sh
-OS_IMAGE_SCRIPT_NAME=post-$(build_os_mapr_token $OS_TYPE $MAPR_VERSION).sh
-OS_IMAGE_SECURE_SCRIPT_FULL_PATH=./bin/post-install/post-$(build_os_mapr_token $OS_TYPE)-$CLUSTER_SECURE-secure.sh
-OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH=./bin/post-install/$OS_IMAGE_SCRIPT_NAME
+OS_IMAGE_POST_INSTALL_SCRIPT_NAME=post-$(build_os_mapr_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_SECURE_SCRIPT_FULL_PATH=./bin/post-install/post-$(build_os_token $OS_TYPE)-$CLUSTER_SECURE-secure.sh
+OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH=./bin/post-install/$OS_IMAGE_POST_INSTALL_SCRIPT_NAME
 OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 
 set_hbase_version_in_script $HBASE_VERSION $OS_IMAGE_INSTALL_SCRIPT_FULL_PATH
-set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
-set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
-set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
-set_run_configure_sh_after_install_in_script $RUN_CONFIGURE_SH_AFTER_INSTALL $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
+set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+set_run_configure_sh_after_install_in_script $RUN_CONFIGURE_SH_AFTER_INSTALL $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
 set_cluster_secure_in_script $CLUSTER_SECURE $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
+
+case $CLUSTER_SECURE in
+ none)
+ ;;
+ mapr)
+ ;;
+ kerberos)
+ set_krb_default_realm_in_script $KRB_DEFAULT_REALM  $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+ set_krb_database_passwd_in_script $KRB_DATABASE_PASSWD $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+ set_krb_admin_user_passwd_in_script $KRB_ADMIN_USER_PASSWD $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+ set_krb_mapr_user_passwd_in_script $KRB_MAPR_USER_PASSWD  $OS_IMAGE_SECURE_SCRIPT_FULL_PATH
+ ;;
+esac
 
 echo '[INFO] Create dir '$OS_IMAGE_DIR
 mkdir -p $OS_IMAGE_DIR
@@ -89,5 +102,5 @@ while [[ $RESULT -ne 0 ]]; do
 done
 
 echo '[INFO] Copy and run post install script.'
-scp $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH root@$OS_IMAGE_HOST_ALIAS:/root/
-ssh root@$OS_IMAGE_HOST_ALIAS 'bash /root/'$OS_IMAGE_SCRIPT_NAME
+scp $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH $OS_IMAGE_SECURE_SCRIPT_FULL_PATH root@$OS_IMAGE_HOST_ALIAS:/root/
+ssh root@$OS_IMAGE_HOST_ALIAS 'bash /root/'$OS_IMAGE_POST_INSTALL_SCRIPT_NAME

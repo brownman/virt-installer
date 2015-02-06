@@ -13,6 +13,18 @@ echo '[INFO] Image size (GB)                       : '$OS_IMAGE_SIZE
 echo '[INFO] Image RAM size (MB)                   : '$OS_IMAGE_MEMORY
 echo '[INFO] Image virtual CPU count               : '$OS_IMAGE_VIRT_CPU
 echo '[INFO] Cluster secure                        : '$CLUSTER_SECURE
+case $CLUSTER_SECURE in
+ none)
+ ;;
+ mapr)
+ ;;
+ kerberos)
+ echo '[INFO] Kerberos default realm                : '$KRB_DEFAULT_REALM
+ echo '[INFO] Kerberos database password            : '$KRB_DATABASE_PASSWD
+ echo '[INFO] Kerberos admin user password          : '$KRB_ADMIN_USER_PASSWD
+ echo '[INFO] Kerberos mapr user password           : '$KRB_MAPR_USER_PASSWD
+ ;;
+esac
 echo '[INFO] Image hostname                        : '$OS_IMAGE_HOST_NAME
 echo '[INFO] Image host alias                      : '$OS_IMAGE_HOST_ALIAS
 echo '[INFO] Image filename                        : '$OS_IMAGE_FILE_NAME
@@ -250,6 +262,35 @@ fi
 }
 
 
+function input_krb_default_realm(){
+read -p "[INPUT] Kerberos default realm ["$KRB_DEFAULT_REALM"]: " ANSWER
+if [[ -n $ANSWER ]]
+then KRB_DEFAULT_REALM=$ANSWER
+fi
+}
+
+function input_krb_database_passwd(){
+read -p "[INPUT] Kerberos database password ["$KRB_DATABASE_PASSWD"]: " ANSWER
+if [[ -n $ANSWER ]]
+then KRB_DATABASE_PASSWD=$ANSWER
+fi
+}
+
+
+function input_krb_admin_user_passwd(){
+read -p "[INPUT] Kerberos admin user password ["$KRB_ADMIN_USER_PASSWD"]: " ANSWER
+if [[ -n $ANSWER ]]
+then KRB_ADMIN_USER_PASSWD=$ANSWER
+fi
+}
+
+function input_krb_mapr_user_passwd(){
+read -p "[INPUT] Kerberos mapr user password ["$KRB_MAPR_USER_PASSWD"]: " ANSWER
+if [[ -n $ANSWER ]]
+then KRB_MAPR_USER_PASSWD=$ANSWER
+fi
+}
+
 function input_cluster_secure(){
 echo '[INFO] Select cluster secure'
 echo '[INFO] 1 none'
@@ -300,6 +341,10 @@ export OS_IMAGE_MEMORY=$OS_IMAGE_MEMORY
 export OS_IMAGE_VIRT_CPU=$OS_IMAGE_VIRT_CPU
 export RUN_CONFIGURE_SH_AFTER_INSTALL=$RUN_CONFIGURE_SH_AFTER_INSTALL
 export CLUSTER_SECURE=$CLUSTER_SECURE
+export KRB_DEFAULT_REALM=$KRB_DEFAULT_REALM
+export KRB_DATABASE_PASSWD=$KRB_DATABASE_PASSWD
+export KRB_ADMIN_USER_PASSWD=$KRB_ADMIN_USER_PASSWD
+export KRB_MAPR_USER_PASSWD=$KRB_MAPR_USER_PASSWD
 }
 
 function get_input_from_console(){
@@ -312,6 +357,18 @@ input_image_size
 input_image_ram_size
 input_cpu_count
 input_cluster_secure
+case $CLUSTER_SECURE in
+ none)
+ ;;
+ mapr)
+ ;;
+ kerberos)
+ input_krb_default_realm
+ input_krb_database_passwd
+ input_krb_admin_user_passwd
+ input_krb_mapr_user_passwd
+ ;;
+esac
 input_host_name
 input_host_alias
 input_file_name
