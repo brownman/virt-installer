@@ -12,6 +12,7 @@ echo '[INFO] Image root password                   : '$OS_IMAGE_ROOT_PASSWD
 echo '[INFO] Image size (GB)                       : '$OS_IMAGE_SIZE
 echo '[INFO] Image RAM size (MB)                   : '$OS_IMAGE_MEMORY
 echo '[INFO] Image virtual CPU count               : '$OS_IMAGE_VIRT_CPU
+echo '[INFO] Cluster secure                        : '$CLUSTER_SECURE
 echo '[INFO] Image hostname                        : '$OS_IMAGE_HOST_NAME
 echo '[INFO] Image host alias                      : '$OS_IMAGE_HOST_ALIAS
 echo '[INFO] Image filename                        : '$OS_IMAGE_FILE_NAME
@@ -174,7 +175,7 @@ done
 }
 
 function input_host_name(){
-OS_IMAGE_HOST_NAME=$(build_token $OS_TYPE $MAPR_VERSION).com
+OS_IMAGE_HOST_NAME=$(build_os_mapr_secure_token $OS_TYPE $MAPR_VERSION $CLUSTER_SECURE).com
 
 read -p "[INPUT] Image hostname ["$OS_IMAGE_HOST_NAME"]: " ANSWER
 if [[ -n $ANSWER ]]
@@ -183,7 +184,7 @@ fi
 }
 
 function input_host_alias(){
-OS_IMAGE_HOST_ALIAS=$(build_token $OS_TYPE $MAPR_VERSION)
+OS_IMAGE_HOST_ALIAS=$(build_os_mapr_secure_token $OS_TYPE $MAPR_VERSION $CLUSTER_SECURE)
 
 read -p "[INPUT] Image host alias ["$OS_IMAGE_HOST_ALIAS"]: " ANSWER
 if [[ -n $ANSWER ]]
@@ -193,7 +194,7 @@ fi
 
 
 function input_file_name(){
-OS_IMAGE_FILE_NAME=$(build_token $OS_TYPE $MAPR_VERSION).$OS_IMAGE_FORMAT
+OS_IMAGE_FILE_NAME=$(build_os_mapr_secure_token $OS_TYPE $MAPR_VERSION $CLUSTER_SECURE).$OS_IMAGE_FORMAT
 
 read -p "[INPUT] Image filename ["$OS_IMAGE_FILE_NAME"]: " ANSWER
 if [[ -n $ANSWER ]]
@@ -249,6 +250,39 @@ fi
 }
 
 
+function input_cluster_secure(){
+echo '[INFO] Select cluster secure'
+echo '[INFO] 1 none'
+echo '[INFO] 2 mapr'
+echo '[INFO] 3 kerberos'
+while true; do
+read -p "[INPUT] Cluster secure ["$CLUSTER_SECURE"]:" ANSWER
+if [[ -n $ANSWER ]]
+then
+    if [[ $ANSWER != 1 && $ANSWER != 2 && $ANSWER != 3 ]]
+    then  echo '[ERROR] Wrong cluster secure :'$ANSWER'. Possible input 1, 2 or 3.'
+    fi
+
+    if [[ $ANSWER == 1 ]]
+    then CLUSTER_SECURE=none
+         break
+    fi
+
+    if [[ $ANSWER == 2 ]]
+    then CLUSTER_SECURE=mapr
+         break
+    fi
+
+    if [[ $ANSWER == 3 ]]
+    then CLUSTER_SECURE=kerberos
+         break
+    fi
+else break
+fi
+done
+}
+
+
 function export_vars(){
 export OS_IMAGE_DIR=$OS_IMAGE_DIR
 export OS_IMAGE_FORMAT=$OS_IMAGE_FORMAT
@@ -265,6 +299,7 @@ export OS_IMAGE_FILE_NAME=$OS_IMAGE_FILE_NAME
 export OS_IMAGE_MEMORY=$OS_IMAGE_MEMORY
 export OS_IMAGE_VIRT_CPU=$OS_IMAGE_VIRT_CPU
 export RUN_CONFIGURE_SH_AFTER_INSTALL=$RUN_CONFIGURE_SH_AFTER_INSTALL
+export CLUSTER_SECURE=$CLUSTER_SECURE
 }
 
 function get_input_from_console(){
@@ -276,6 +311,7 @@ input_root_password
 input_image_size
 input_image_ram_size
 input_cpu_count
+input_cluster_secure
 input_host_name
 input_host_alias
 input_file_name

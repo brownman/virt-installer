@@ -3,7 +3,7 @@
 set -x
 
 KRB_DEFAULT_REALM=
-HOST_NAME=
+OS_IMAGE_HOST_NAME=
 KRB_DATABASE_PASSWD=
 KRB_ADMIN_USER_PASSWD=
 KRB_MAPR_USER_PASSWD=
@@ -30,15 +30,15 @@ cat >> /etc/krb5.conf << EOF
 
 [realms] 
     $KRB_DEFAULT_REALM = {
-    kdc = $HOST_NAME
-    admin_server = $HOST_NAME
-    default_domain = $HOST_NAME
+    kdc = $OS_IMAGE_HOST_NAME
+    admin_server = $OS_IMAGE_HOST_NAME
+    default_domain = $OS_IMAGE_HOST_NAME
     acl_file = /etc/krb5kdc/kadm5.acl
 }
 
 [domain_realm] 
-    .$HOST_NAME = $KRB_DEFAULT_REALM
-    $HOST_NAME = $KRB_DEFAULT_REALM
+    .$OS_IMAGE_HOST_NAME = $KRB_DEFAULT_REALM
+    $OS_IMAGE_HOST_NAME = $KRB_DEFAULT_REALM
 
 EOF
 

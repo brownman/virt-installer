@@ -7,12 +7,12 @@ RUN_CONFIGURE_SH_AFTER_INSTALL=
 
 # Adding hostname to /etc/hosts...
 IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-HOST_NAME=
-HOST_ALIAS=
+OS_IMAGE_HOST_NAME=
+OS_IMAGE_HOST_ALIAS=
 cat >> /etc/hosts << EOF
 
 # Host name
-$IP_ETH0  $HOST_NAME  $HOST_ALIAS
+$IP_ETH0  $OS_IMAGE_HOST_NAME  $OS_IMAGE_HOST_ALIAS
 EOF
 
 # Setup storage

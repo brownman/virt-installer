@@ -23,8 +23,9 @@ if [[ $LETS_ROCK_N_ROLL != 1 ]]
 then exit 0
 fi
 
-OS_IMAGE_INSTALL_SCRIPT_FULL_PATH=./bin/install/$(build_token $OS_TYPE $MAPR_VERSION).sh
-OS_IMAGE_SCRIPT_NAME=post-$(build_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_INSTALL_SCRIPT_FULL_PATH=./bin/install/$(build_os_mapr_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_SCRIPT_NAME=post-$(build_os_mapr_token $OS_TYPE $MAPR_VERSION).sh
+OS_IMAGE_SECURE_SCRIPT_FULL_PATH=./bin/post-install/post-$(build_os_mapr_token $OS_TYPE)-$CLUSTER_SECURE-secure.sh
 OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH=./bin/post-install/$OS_IMAGE_SCRIPT_NAME
 OS_IMAGE_FULL_PATH=$OS_IMAGE_DIR/$OS_IMAGE_FILE_NAME
 
@@ -33,6 +34,7 @@ set_cluster_name_in_script $OS_IMAGE_CLUSTER_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_
 set_hostname_in_script $OS_IMAGE_HOST_NAME $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
 set_hostalias_in_script $OS_IMAGE_HOST_ALIAS $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
 set_run_configure_sh_after_install_in_script $RUN_CONFIGURE_SH_AFTER_INSTALL $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
+set_cluster_secure_in_script $CLUSTER_SECURE $OS_IMAGE_POST_INSTALL_SCRIPT_FULL_PATH
 
 echo '[INFO] Create dir '$OS_IMAGE_DIR
 mkdir -p $OS_IMAGE_DIR
