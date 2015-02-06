@@ -15,7 +15,7 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get -y install krb5-kdc krb5-admin-server krb5-user libpam-krb5 libpam-ccreds auth-client-config ntp haveged
 
 
-cat >> /etc/krb5.conf << EOF
+cat > /etc/krb5.conf << EOF
 [logging]
     default = FILE:/var/log/krb5libs.log
     kdc = FILE:/var/log/krb5kdc.log
