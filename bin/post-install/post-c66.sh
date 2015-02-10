@@ -14,6 +14,9 @@ cat >> /etc/hosts << EOF
 $IP_ETH0  $OS_IMAGE_HOST_NAME  $OS_IMAGE_HOST_ALIAS
 EOF
 
+# Configure hostname
+hostname --fqdn > /opt/mapr/hostname
+
 # Setup storage
 losetup /dev/loop0 /mapr-disks/disk0
 

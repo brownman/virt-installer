@@ -1,25 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-set -x
 
 OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 RUN_CONFIGURE_SH_AFTER_INSTALL=
-
-# Adding hostname to /etc/hosts...
-IP_ETH0=`ifconfig eth0 | grep inet | cut -d ":" -f 2 | cut -d " " -f 1`
-OS_IMAGE_HOST_NAME=
-OS_IMAGE_HOST_ALIAS=
-cat >> /etc/hosts << EOF
-
-# Host name
-$IP_ETH0  $OS_IMAGE_HOST_NAME  $OS_IMAGE_HOST_ALIAS
-EOF
-
-# Configure hostname
-hostname --fqdn > /opt/mapr/hostname
-
-# Setup storage
-losetup /dev/loop0 /mapr-disks/disk0
 
 # Configuring cluster...
 if [ $RUN_CONFIGURE_SH_AFTER_INSTALL -eq 1 ]; then
