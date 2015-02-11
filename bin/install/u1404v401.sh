@@ -4,7 +4,6 @@ set -x
 
 HBASE_VERSION='0.98.4'
 HIVE_VERSION=
-OS_IMAGE_CLUSTER_NAME=mrv2.mapr.cluster
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
