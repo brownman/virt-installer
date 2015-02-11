@@ -1,6 +1,7 @@
 #!/bin/sh
 
 HBASE_VERSION='0.94.21'
+HIVE_VERSION=
 
 # Creating dir: /root/mapr-repo...
 mkdir /root/mapr-repo
@@ -26,11 +27,20 @@ case $HBASE_VERSION in
     ;;
 esac
 
-# Downloading Hive-0.13...
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hive-0.13.201411180959-1.noarch.rpm'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hivemetastore-0.13.201411180959-1.noarch.rpm'
-cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem/redhat/mapr-hiveserver2-0.13.201411180959-1.noarch.rpm'
-
+case $HIVE_VERSION in
+'0.12')
+    # Downloading Hive-0.12...
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hive-0.12.201502021326-1.noarch.rpm'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hivemetastore-0.12.201502021326-1.noarch.rpm'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hiveserver2-0.12.201502021326-1.noarch.rpm'
+;;
+'0.13')
+    # Downloading Hive-0.13...
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hive-0.13.201411180959-1.noarch.rpm'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hivemetastore-0.13.201411180959-1.noarch.rpm'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/redhat/mapr-hiveserver2-0.13.201411180959-1.noarch.rpm'
+;;
+esac
 
 # Creating package
 createrepo /root/mapr-repo
