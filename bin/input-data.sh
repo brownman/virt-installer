@@ -30,6 +30,7 @@ echo '[INFO] Image host alias                      : '$OS_IMAGE_HOST_ALIAS
 echo '[INFO] Image filename                        : '$OS_IMAGE_FILE_NAME
 echo '[INFO] MapR cluster name                     : '$OS_IMAGE_CLUSTER_NAME
 echo '[INFO] Hbase version                         : '$HBASE_VERSION
+echo '[INFO] Hive  version                         : '$HIVE_VERSION
 echo '[INFO] Run configure.sh after package install: '$RUN_CONFIGURE_SH_AFTER_INSTALL
 }
 
@@ -247,6 +248,33 @@ fi
 done
 }
 
+function input_hive_version(){
+echo '[INFO] Select Hive version'
+echo '[INFO] 1 0.12'
+echo '[INFO] 2 0.13'
+while true; do
+read -p "[INPUT] Hbase version ["$HIVE_VERSION"]:" ANSWER
+if [[ -n $ANSWER ]]
+then
+    if [[ $ANSWER != 1 && $ANSWER != 2 ]]
+    then  echo '[ERROR] Wrong Hive version :'$ANSWER'. Possible input 1 or 2.'
+    fi
+
+    if [[ $ANSWER == 1 ]]
+    then HIVE_VERSION='0.12'
+         break
+    fi
+
+    if [[ $ANSWER == 2 ]]
+    then HIVE_VERSION='0.13'
+         break
+    fi
+else break
+fi
+done
+}
+
+
 function input_lets_rock_n_roll(){
 read -p "[INPUT] Lets rock'n'roll (1 - yes, 0 - no)? ["$LETS_ROCK_N_ROLL"]: " ANSWER
 if [[ -n $ANSWER ]]
@@ -333,6 +361,7 @@ export OS_TYPE=$OS_TYPE
 export MAPR_VERSION=$MAPR_VERSION
 export LETS_ROCK_N_ROLL=$LETS_ROCK_N_ROLL
 export HBASE_VERSION=$HBASE_VERSION
+export HIVE_VERSION=$HIVE_VERSION
 export OS_IMAGE_CLUSTER_NAME=$OS_IMAGE_CLUSTER_NAME
 export OS_IMAGE_HOST_NAME=$OS_IMAGE_HOST_NAME
 export OS_IMAGE_HOST_ALIAS=$OS_IMAGE_HOST_ALIAS
@@ -374,6 +403,7 @@ input_host_alias
 input_file_name
 input_cluster_name
 input_hbase_version
+input_hive_version
 input_run_configure_sh_after_install
 print_input_summary
 input_lets_rock_n_roll

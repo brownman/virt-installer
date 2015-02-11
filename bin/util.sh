@@ -56,6 +56,12 @@ sed -i "s/.*HBASE_VERSION=.*/HBASE_VERSION='$HBASE_VERSION'/g" $PATH_TO_SCRIPT
 }
 
 
+function set_hive_version_in_script(){
+local HIVE_VERSION=$1
+local PATH_TO_SCRIPT=$2
+sed -i "s/.*HIVE_VERSION=.*/HIVE_VERSION='$HIVE_VERSION'/g" $PATH_TO_SCRIPT
+}
+
 function set_hostname_in_script(){
 local OS_IMAGE_HOST_NAME=$1
 local PATH_TO_SCRIPT=$2
