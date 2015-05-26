@@ -2,7 +2,7 @@
 
 set -x
 
-HBASE_VERSION='0.98.4'
+HBASE_VERSION=
 HIVE_VERSION=
 
 # Creating dir: /root/mapr-repo...
@@ -44,9 +44,9 @@ case $HIVE_VERSION in
 ;;
 '0.13')
     # Downloading Hive-0.13...
-    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hive_0.13.201501201824_all.deb'
-    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hivemetastore_0.13.201501201824_all.deb'
-    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hiveserver2_0.13.201501201824_all.deb'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hive_0.13.201503021455_all.deb'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hivemetastore_0.13.201503021455_all.deb'
+    cd /root/mapr-repo && wget 'http://package.mapr.com/releases/ecosystem-4.x/ubuntu/dists/binary/mapr-hiveserver2_0.13.201503021455_all.deb'
 ;;
 esac
 

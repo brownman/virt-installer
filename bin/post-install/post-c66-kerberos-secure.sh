@@ -10,7 +10,11 @@ KRB_MAPR_USER_PASSWD=
 OS_IMAGE_CLUSTER_NAME=
 RUN_CONFIGURE_SH_AFTER_INSTALL=
 
-yum install krb5-server krb5-libs krb5-auth-dialog  krb5-workstation -y
+# install epel for centos 6
+su -c 'rpm -Uvh http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm'
+
+# install kerberos stuff
+yum install krb5-server krb5-libs  krb5-workstation ntp haveged -y
 
 cat > /etc/krb5.conf << EOF
 [logging]
@@ -22,7 +26,8 @@ cat > /etc/krb5.conf << EOF
     default_realm = $KRB_DEFAULT_REALM
     dns_lookup_realm = false
     ns_lookup_kdc = false
-    ticket_lifetime = 24h
+    ticket_lifetime = 365d
+    renew_lifetime = 365d
     forwardable = true
 
 [realms] 
@@ -30,7 +35,7 @@ cat > /etc/krb5.conf << EOF
     kdc = $OS_IMAGE_HOST_NAME
     admin_server = $OS_IMAGE_HOST_NAME
     default_domain = $OS_IMAGE_HOST_NAME
-    acl_file = /etc/krb5kdc/kadm5.acl
+    acl_file = /var/kerberos/krb5kdc/kadm5.acl
 }
 
 [domain_realm] 
@@ -39,11 +44,13 @@ cat > /etc/krb5.conf << EOF
 
 EOF
 
+# Increase entropy
+haveged
 
 # Create KDC database
 kdb5_util create -s -r $KRB_DEFAULT_REALM -P $KRB_DATABASE_PASSWD
 
-echo "*/admin@$KRB_DEFAULT_REALM    *"  > /etc/krb5kdc/kadm5.acl
+echo "*/admin@$KRB_DEFAULT_REALM    *"  > /var/kerberos/krb5kdc/kadm5.acl
 
 # Create principals for admin user
 echo "addprinc -pw $KRB_ADMIN_USER_PASSWD root/admin@$KRB_DEFAULT_REALM" | kadmin.local
@@ -73,8 +80,8 @@ if [ $RUN_CONFIGURE_SH_AFTER_INSTALL -eq 1 ]; then
     # Configuring warden.conf. Setting mfs.heapsize.percent=10
     sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
     
-    kinit -kt /opt/mapr/conf/mapr.keytab mapr/$OS_IMAGE_CLUSTER_NAME@$KRB_DEFAULT_REALM
+    sudo -u mapr kinit -kt /opt/mapr/conf/mapr.keytab mapr/$OS_IMAGE_CLUSTER_NAME@$KRB_DEFAULT_REALM
 
-    maprlogin kerberos
+    sudo -u mapr maprlogin kerberos
 
 fi

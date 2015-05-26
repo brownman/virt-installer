@@ -24,7 +24,7 @@ hostname --fqdn > /opt/mapr/hostname
 losetup /dev/loop0 /mapr-disks/disk0
 
 case $CLUSTER_SECURE in
-    none) bash ./post-u1404-none-secure.sh ;;
-    mapr) bash ./post-u1404-mapr-secure.sh ;;
-    kerberos) bash ./post-u1404-kerberos-secure.sh ;;
+    none) bash ./post-c66-none-secure.sh ;;
+    mapr) bash ./post-c66-mapr-secure.sh ;;
+    kerberos) bash ./post-c66-kerberos-secure.sh ;;
 esac

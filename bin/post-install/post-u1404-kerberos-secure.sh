@@ -25,7 +25,8 @@ cat > /etc/krb5.conf << EOF
     default_realm = $KRB_DEFAULT_REALM
     dns_lookup_realm = false
     ns_lookup_kdc = false
-    ticket_lifetime = 24h
+    ticket_lifetime = 365d
+    renew_lifetime = 365d
     forwardable = true
 
 [realms] 
@@ -74,8 +75,8 @@ if [ $RUN_CONFIGURE_SH_AFTER_INSTALL -eq 1 ]; then
     # Configuring warden.conf. Setting mfs.heapsize.percent=10'
     sed -i 's/.*service.command.mfs.heapsize.percent=.*/service.command.mfs.heapsize.percent=10/g' /opt/mapr/conf/warden.conf
 
-    kinit -kt /opt/mapr/conf/mapr.keytab mapr/$OS_IMAGE_CLUSTER_NAME@$KRB_DEFAULT_REALM
+    sudo -u mapr kinit -kt /opt/mapr/conf/mapr.keytab mapr/$OS_IMAGE_CLUSTER_NAME@$KRB_DEFAULT_REALM
 
-    maprlogin kerberos
+    sudo -u mapr maprlogin kerberos
 fi
 
