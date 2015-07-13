@@ -1,5 +1,6 @@
 #!/bin/sh
-export USER_HOME=/home/asayankin
+export USER_HOME=/home/osayankin
+export LIBGUESTFS_HOME=/home/osayankin/libguestfs-1.28.10/
 export OS_IMAGE_DIR=$USER_HOME/os-images
 export OS_IMAGE_FORMAT=qcow2
 export OS_IMAGE_SIZE=30 #GB
