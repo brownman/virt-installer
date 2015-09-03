@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 source ./conf/env.sh
 source ./bin/get-ip.sh
 source ./bin/util.sh
